@@ -1,13 +1,27 @@
-const { ctx, canvas } = initialCanvasSetting();
-const canvasWidth = 300;
-const canvasHeight = 300;
+// const canvasWidth = 300;
+// const canvasHeight = 300;
+/**
+ * innerWidth, innerHeight는 전체화면 길이로 초기화하는것
+ */
+const canvasWidth = innerWidth;
+const canvasHeight = innerHeight;
 
+const { ctx, canvas } = initialCanvasSetting();
 class Particle {
   // particle의 x값, y값, 반지름 값을 constructor로 받는다
-  constructor(x, y, radius) {
+  constructor(x, y, radius, speedY = 1) {
     this.x = x;
     this.y = y;
     this.radius = radius;
+    this.speedY = speedY;
+  }
+
+  update() {
+    /**
+     * 업데이트시 speedY의 값만큼 움직이도록 처리
+     * 랜덤한 속도로 더 빠르게 내려오도록 speedY를 추가
+     */
+    this.y += this.speedY;
   }
 
   draw() {
@@ -32,7 +46,7 @@ class Particle {
      * 이를 180도로 나눠야 각도가 1도가 되기 때문이다
      */
     ctx.arc(this.x, this.y, this.radius, 0, (Math.PI / 180) * 360);
-    ctx.fillStyle = "red"; // fillStyle에 색상을 넣어주면 채워지는 색상을 바꿀 수 있다.
+    ctx.fillStyle = "orange"; // fillStyle에 색상을 넣어주면 채워지는 색상을 바꿀 수 있다.
     ctx.fill(); // fill 메서드는 원형 안에 색상을 채워준다
     //   ctx.stroke(); // stroke 메서드는 원형을 실선 원으로 바꿔준다.
     ctx.closePath(); // 그리는 것을 끝내면 원형이 나오게된다.
@@ -46,9 +60,39 @@ const y = 100;
 const radius = 50;
 // 이렇게 클래스를 사용함으로서 간단하게 여러개의 원을 그릴 수 있게된다.
 const particle = new Particle(x, y, radius);
+const TOTAL = 20; // 파티클의 갯수를 정해준다.
+
+/**
+ *
+ * 최소값과 최대값 사이의 랜덤한 값을 주는 함수
+ */
+const randomNumBetween = (min, max) => {
+  return Math.random() * (max - min + 1) + min;
+};
+
+let particles = [];
+
+/**
+ * 랜덤한 파티클을 생성하기 위한 for문
+ */
+for (let i = 0; i < TOTAL; i++) {
+  const x = randomNumBetween(0, canvasWidth); // 캔버스 전체화면 사이에 랜덤한 x 좌표를 받음
+  const y = randomNumBetween(0, canvasHeight); // 캔버스 전체화면 사이에 랜덤한 y 좌표를 받음
+  const radius = randomNumBetween(50, 100); // 랜덤한 반지름 길이를 받음
+  const speedY = randomNumBetween(1, 5); // 랜덤하게 더 빠른속도로 내려오도록 하는 값
+  const particle = new Particle(x, y, radius, speedY); // 랜덤한 수에 따른 파티클을 생성
+  particles.push(particle); // 파티클 배열에 넣어줌
+}
+
+/**
+ * 60FPS로 동일하게 실행되게하기위한코드 -1
+ */
+const interval = 1000 / 60; // 60FPS를 타겟으로 모든 모니터의 애니메이션이 속도가 같게 하고싶은경우
+let now, delta;
+let then = Date.now();
 
 // particle 클래스의 draw메서드를 사용하여 원을 그림
-particle.draw();
+// particle.draw();
 animate(); // 이 함수를 실행하면 애니메이션이 지속적으로 실행된다.
 /**
  * 애니메이션의 원리는
@@ -60,8 +104,25 @@ function animate() {
    * x와 y좌표를 옆으로 한프레임 한프레임 옮기고 싶을때
    * 즉 한프레임 한프레임 움직이도록 실행할 때 사용하는 것이 requestAnimationFrame
    * requestAnimationFrame에 animate 함수를 넣어줘 매 프레임마다 animate 함수를 실행할 수 있도록 한다.
+   *
+   * 모니터는 보통 144Hz 또는 60Hz의 주사율을 가지고 있다.
+   * 모니터에서 주사율 1Hz는 1초에 화면이 한번 그려진다는 의미이다.
+   * 따라서 게이밍 모니터 또는 보통 모니터는 144, 사무용 모니터는 60의 주사율을 가지고있는데,
+   *
+   * requestAnimationFrame에서는 모니터의 주사율 환경에 따라 1초에 144번 또는 60번 animate 함수가 실행된다고 보면된다.
+   *
+   *
    */
   window.requestAnimationFrame(animate);
+
+  /**
+   * 60FPS로 동일하게 실행되게하기위한코드 -2
+   * ctx.clearRect로 애니메이션그리기 전 if문 처리
+   */
+  now = Date.now();
+  delta = now - then;
+
+  if (delta < interval) return;
 
   /**
    * 이전 프레임을 지우고 새로운 프레임을 다시 그리기위해 사용하는 메서드 clearRect
@@ -76,7 +137,53 @@ function animate() {
    */
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-  particle.draw();
+  /**
+   * 만약 여기서 x를 1px씩 옮기는 애니메이션을 실행한다고 했을때
+   * 만약 주사율이 144인 모니터(게이밍 모니터)에서는 1초에 144px만큼 움직일 것이고,
+   * 주사율이 60인 모니터(사무용 모니터)에서는 1초에 60px만큼 움직이게된다.
+   *
+   * 그렇다면 주사율이 서로 다른 모니터에서 동일한 속도로 이동하게 하고싶다면 어떻게해야할까?
+   *
+   * 그때 알아야할 개념이 fps이다.
+   * fps란 frame per second로 초당 프레임 횟수를 의미하는데,
+   * 캔버스에서는 requestAnimationFrame이 몇번 실행되는가를 의미한다.
+   */
+  // 파티클을 아래로 1씩 움직이게 하는것
+  // particle.y += 1;
+
+  particles.forEach((particle) => {
+    particle.update();
+    particle.draw();
+
+    /**
+     * 파티클이 완전히 전체화면에서 아래로 떨어졌을때 다시 맨위로 올리도록 처리하는 구문
+     *
+     * particle.y - particle.radius
+     * <-- 파티클이 완전히 바닥으로 사라졌을때로 처리하려면
+     * 파티클의 반지름 만큼 더 내려가야하기 때문에 y값에 원의 반지름 만큼 빼준것
+     *
+     */
+    if (particle.y - particle.radius > canvasHeight) {
+      /**
+       * 파티클이 시작하는 시점을 -particle.radius
+       * 원의 반지름의 음수지점에서 시작하는 이유는 자연스럽게 연출하기 위해선
+       * 원의 반지름의 길이만큼 더 위에서 시작해서 자연스럽게 내려오기 때문이다.
+       */
+      particle.y = -particle.radius;
+
+      /**
+       * 완전히 파티클이 바닥에 내려갔을 때 랜덤한 x위치, 랜덤한 원크기 랜덤한 가속도로 다시 실행시키기 위한 구문
+       */
+      particle.x = randomNumBetween(0, canvasWidth);
+      particle.radius = randomNumBetween(50, 100);
+      particle.speedY = randomNumBetween(1, 5);
+    }
+  });
+
+  /**
+   * 60FPS로 동일하게 실행되게하기위한코드 -3
+   */
+  then = now - (delta % interval);
 }
 
 /**
@@ -97,7 +204,6 @@ function initialCanvasSetting() {
    */
   const ctx = canvas.getContext("2d");
   console.log(ctx);
-
   // devicePixelRatio는 화면에 1픽셀당 몇개의 네모칸을 사용하는지 알려주는 프로퍼티이다.
   // devicePixelRatio는 1이면 1픽셀에 1칸을 사용하고 2이면 1픽셀에 2칸씩 총 4칸을 사용하게된다.
   // devicePixelRatio의 값이 클수록 더욱 선명한 화질을 제공하게된다.
