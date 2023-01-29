@@ -1,19 +1,24 @@
 // const canvasWidth = 300;
 // const canvasHeight = 300;
+const dpr = window.devicePixelRatio;
+let canvasWidth;
+let canvasHeight;
+let particles;
 /**
- * innerWidth, innerHeight는 전체화면 길이로 초기화하는것
+ *
+ * 최소값과 최대값 사이의 랜덤한 값을 주는 함수
  */
-const canvasWidth = innerWidth;
-const canvasHeight = innerHeight;
-
-const { ctx, canvas } = initialCanvasSetting();
+const randomNumBetween = (min, max) => {
+  return Math.random() * (max - min + 1) + min;
+};
 class Particle {
   // particle의 x값, y값, 반지름 값을 constructor로 받는다
   constructor(x, y, radius, speedY = 1) {
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.speedY = speedY;
+    this.speedY = speedY; // 떨어지는 속도를 랜덤하게 부여하기 위한 코드
+    this.acc = 1.03; // 떨어지는 가속도를 일정하게 늘려주는 코드
   }
 
   update() {
@@ -21,6 +26,7 @@ class Particle {
      * 업데이트시 speedY의 값만큼 움직이도록 처리
      * 랜덤한 속도로 더 빠르게 내려오도록 speedY를 추가
      */
+    this.speedY *= this.acc;
     this.y += this.speedY;
   }
 
@@ -54,35 +60,57 @@ class Particle {
     //   ctx.arc(100, 100, 50, 0, (Math.PI / 180) * 180); <- 만약 360도가 아닌 180도를 넣어주면 반원이 그려진다.
   }
 }
+const { ctx, canvas } = initialCanvasSetting();
+function init() {
+  /**
+   * innerWidth, innerHeight는 전체화면 길이로 초기화하는것
+   */
+  canvasWidth = innerWidth;
+  canvasHeight = innerHeight;
+
+  /**
+   * 보통은 캔버스의 크기를 처음에 아래와같이 지정해놓고 시작한다
+   *
+   * style width와 canvas 자체의 width가 같게하도록 설정
+   * style height와 canvas 자체의 height가 같게하도록 설정
+   */
+  canvas.style.width = canvasWidth + "px";
+  canvas.style.height = canvasHeight + "px";
+
+  /**
+   * dpr을 캔버스 기본 width, height에 곱해주는 이유는
+   * 디스플레이의 기능에 맞게 화질을 높이기 위해서
+   */
+  canvas.width = canvasWidth * dpr;
+  canvas.height = canvasHeight * dpr;
+
+  /**
+   * 캔버스 2d 도구를 통해 scale 메서드를 사용해 dpr값들을 넣어주면 더욱 선명한 화질을 제공할 수 있다.
+   */
+  ctx.scale(dpr, dpr);
+  // const TOTAL = 20; // 파티클의 갯수를 정해준다.
+  const TOTAL = canvasWidth / 20; // 파티클의 갯수를 정해준다.
+
+  particles = [];
+
+  /**
+   * 랜덤한 파티클을 생성하기 위한 for문
+   */
+  for (let i = 0; i < TOTAL; i++) {
+    const x = randomNumBetween(0, canvasWidth); // 캔버스 전체화면 사이에 랜덤한 x 좌표를 받음
+    const y = randomNumBetween(0, canvasHeight); // 캔버스 전체화면 사이에 랜덤한 y 좌표를 받음
+    const radius = randomNumBetween(50, 100); // 랜덤한 반지름 길이를 받음
+    const speedY = randomNumBetween(1, 5); // 랜덤하게 더 빠른속도로 내려오도록 하는 값
+    const particle = new Particle(x, y, radius, speedY); // 랜덤한 수에 따른 파티클을 생성
+    particles.push(particle); // 파티클 배열에 넣어줌
+  }
+}
 
 const x = 100;
 const y = 100;
 const radius = 50;
 // 이렇게 클래스를 사용함으로서 간단하게 여러개의 원을 그릴 수 있게된다.
 const particle = new Particle(x, y, radius);
-const TOTAL = 20; // 파티클의 갯수를 정해준다.
-
-/**
- *
- * 최소값과 최대값 사이의 랜덤한 값을 주는 함수
- */
-const randomNumBetween = (min, max) => {
-  return Math.random() * (max - min + 1) + min;
-};
-
-let particles = [];
-
-/**
- * 랜덤한 파티클을 생성하기 위한 for문
- */
-for (let i = 0; i < TOTAL; i++) {
-  const x = randomNumBetween(0, canvasWidth); // 캔버스 전체화면 사이에 랜덤한 x 좌표를 받음
-  const y = randomNumBetween(0, canvasHeight); // 캔버스 전체화면 사이에 랜덤한 y 좌표를 받음
-  const radius = randomNumBetween(50, 100); // 랜덤한 반지름 길이를 받음
-  const speedY = randomNumBetween(1, 5); // 랜덤하게 더 빠른속도로 내려오도록 하는 값
-  const particle = new Particle(x, y, radius, speedY); // 랜덤한 수에 따른 파티클을 생성
-  particles.push(particle); // 파티클 배열에 넣어줌
-}
 
 /**
  * 60FPS로 동일하게 실행되게하기위한코드 -1
@@ -93,7 +121,7 @@ let then = Date.now();
 
 // particle 클래스의 draw메서드를 사용하여 원을 그림
 // particle.draw();
-animate(); // 이 함수를 실행하면 애니메이션이 지속적으로 실행된다.
+
 /**
  * 애니메이션의 원리는
  *
@@ -208,28 +236,73 @@ function initialCanvasSetting() {
   // devicePixelRatio는 1이면 1픽셀에 1칸을 사용하고 2이면 1픽셀에 2칸씩 총 4칸을 사용하게된다.
   // devicePixelRatio의 값이 클수록 더욱 선명한 화질을 제공하게된다.
   console.log(window.devicePixelRatio);
-  const dpr = window.devicePixelRatio;
 
   /**
-   * 보통은 캔버스의 크기를 처음에 아래와같이 지정해놓고 시작한다
+   * 블러 태그 가져옴
+   */
+  const feGaussianBlur = document.querySelector("feGaussianBlur");
+
+  /**
+   * contrast 세팅 태그를 가져옴
+   */
+  const feColorMatrix = document.querySelector("feColorMatrix");
+
+  /**
+   * 블러와 contrast 태그에 걸어놓은 기본 속성값들을 세팅해놓음
    *
-   * style width와 canvas 자체의 width가 같게하도록 설정
-   * style height와 canvas 자체의 height가 같게하도록 설정
    */
-  canvas.style.width = canvasWidth + "px";
-  canvas.style.height = canvasHeight + "px";
+  const controls = new (function () {
+    this.blurValue = 40;
+    this.alphaChannel = 100;
+    this.alphaOffset = -23;
+    this.acc = 1.03; // 만약 가속도 값도 바꾸고 싶으면 설정
+  })();
 
   /**
-   * dpr을 캔버스 기본 width, height에 곱해주는 이유는
-   * 디스플레이의 기능에 맞게 화질을 높이기 위해서
+   * dat gui를 가져옴
    */
-  canvas.width = canvasWidth * dpr;
-  canvas.height = canvasHeight * dpr;
+  let gui = new dat.GUI();
 
   /**
-   * 캔버스 2d 도구를 통해 scale 메서드를 사용해 dpr값들을 넣어주면 더욱 선명한 화질을 제공할 수 있다.
+   * GUI 폴더 구분하기 위한 것
    */
-  ctx.scale(dpr, dpr);
+  const f1 = gui.addFolder("Gooey Effect");
+  f1.open(); // f1 폴더 미리 열어놓기
+
+  /**
+   * dat gui의 blurValue를 0에서 100까지 컨트롤하는 컨트롤러를 만듦
+   *
+   * 이 컨트롤러를 만들어서 blur값을 오른쪽 상단에 생기는 컨트롤러로 자유롭게 세팅가능
+   */
+  f1.add(controls, "blurValue", 0, 100).onChange((value) => {
+    /**
+     * feGaussianBlur의 attribute값인 stdDeviation값을 컨트롤러 값으로 변경
+     */
+    feGaussianBlur.setAttribute("stdDeviation", value);
+  });
+  /**
+   * contrast 값을 변경
+   */
+  f1.add(controls, "alphaChannel", 0, 200).onChange((value) => {
+    feColorMatrix.setAttribute(
+      "values",
+      `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${value} ${controls.alphaOffset}`
+    );
+  });
+  f1.add(controls, "alphaOffset", -40, 40).onChange((value) => {
+    feColorMatrix.setAttribute(
+      "values",
+      `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${controls.alphaChannel} ${value}`
+    );
+  });
+
+  const f2 = gui.addFolder("Particle Property");
+  f2.open(); // f1 폴더 미리 열어놓기
+
+  // 5번째 인자는 스텝을 얼마나할 것인지 설정하는것 -> 0.01로 세팅하면 0.01만큼 컨트롤러가 움직이게됨
+  f2.add(controls, "acc", 1, 1.5, 0.01).onChange((value) => {
+    particles.forEach((particle) => (particle.acc = value));
+  });
 
   /**
    * fillRect 함수는 사각형을 그리는 함수로
@@ -242,3 +315,11 @@ function initialCanvasSetting() {
     ctx,
   };
 }
+
+window.addEventListener("load", () => {
+  init();
+  animate(); // 이 함수를 실행하면 애니메이션이 지속적으로 실행된다.
+});
+window.addEventListener("resize", () => {
+  init();
+});
