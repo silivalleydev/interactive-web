@@ -2,7 +2,7 @@
  * 최소값과 최대값 사이의 랜덤한 값을 주는 함수
  */
 export const randomNumBetween = (min, max) => {
-  return Math.random() * (max - min + 1) + min;
+  return Math.random() * (max - min) + min;
 };
 
 export const hypotenuse = (x, y) => {
