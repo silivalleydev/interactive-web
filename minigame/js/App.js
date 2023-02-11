@@ -1,4 +1,5 @@
 import Background from "./Background.js";
+import Wall from "./Wall.js";
 
 /**
  * https://itch.io/game-assets
@@ -27,6 +28,7 @@ export default class App {
         speed: -4,
       }),
     ];
+    this.walls = [new Wall({ type: "SMALL" })];
     /**
      * bind(this)를 하지 않으면 이벤트 등록의 주체인 window가 주체가된다.
      *
@@ -61,10 +63,34 @@ export default class App {
 
       App.ctx.clearRect(0, 0, App.width, App.height);
       App.ctx.fillRect(50, 50, 100, 100);
+
+      // 배경관련
       this.backgrounds.forEach((background) => {
         background.update();
         background.draw();
       });
+
+      // 벽관련
+      for (let i = this.walls.length - 1; i >= 0; i--) {
+        const wall = this.walls[i];
+        wall.update();
+        wall.draw();
+
+        // 벽 제거
+        if (wall.isOutside) {
+          this.walls.splice(i, 1);
+          continue;
+        }
+
+        // 벽 생성
+        if (wall.canGenerateNext) {
+          this.walls[i].generatedNext = true;
+          this.walls.push(
+            new Wall({ type: Math.random() > 0.3 ? "SMALL" : "BIG" })
+          );
+        }
+      }
+
       then = now - (delta % App.interval);
     };
     requestAnimationFrame(frame);
