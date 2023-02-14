@@ -1,4 +1,5 @@
 import Background from "./Background.js";
+import Player from "./Player.js";
 import Wall from "./Wall.js";
 
 /**
@@ -29,6 +30,7 @@ export default class App {
       }),
     ];
     this.walls = [new Wall({ type: "SMALL" })];
+    this.player = new Player();
     /**
      * bind(this)를 하지 않으면 이벤트 등록의 주체인 window가 주체가된다.
      *
@@ -58,7 +60,7 @@ export default class App {
       requestAnimationFrame(frame);
 
       now = Date.now();
-      delta = now - delta;
+      delta = now - then;
       if (delta < App.interval) return;
 
       App.ctx.clearRect(0, 0, App.width, App.height);
@@ -90,6 +92,10 @@ export default class App {
           );
         }
       }
+
+      // 플레이어 관련
+      this.player.update();
+      this.player.draw();
 
       then = now - (delta % App.interval);
     };
