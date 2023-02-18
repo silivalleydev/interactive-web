@@ -91,6 +91,11 @@ export default class App {
             new Wall({ type: Math.random() > 0.3 ? "SMALL" : "BIG" })
           );
         }
+
+        // 벽 충돌 관련
+        if (this.walls[i].isColliding(this.player.boundingBox)) {
+          console.log("colll");
+        }
       }
 
       // 플레이어 관련
