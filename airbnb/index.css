@@ -1,5 +1,142 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+   
+   리셋하는 css를 모은 사이트
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 80px;
+  height: 80px;
+  box-shadow: rgb(0 0 0 / 8%) 0 1px 0;
 }
 
 #logo {
@@ -10,6 +147,10 @@ header {
 button {
   border: none;
   background-color: transparent;
+}
+
+#little-search:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 }
 
 #little-search {
@@ -24,6 +165,11 @@ button {
   height: 48px;
   box-sizing: border-box;
   box-shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%);
+}
+
+/* #little-search * <-- 이렇게 별을 넣어주게되면, 그안에있는 모든 요소에 적용이된다. */
+#little-search * {
+  cursor: pointer;
 }
 
 .little-search-button {
@@ -76,4 +222,41 @@ button {
  자동으로 아이템 너비가 축소되지 않도록 하려면 반드시 "flex-shrink: 0;"을 아이템에 선언
   */
   flex-shrink: 0;
+}
+
+#do-airbnb {
+  padding: 12px;
+  font-size: 14px;
+  color: #222222;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* :hover는 마우를 올렸을 때 css를 의미한다. */
+#do-airbnb:hover {
+  background-color: #f7f7f7;
+}
+
+#header-right-section {
+  display: flex;
+  gap: 8px;
+}
+
+#profile-section {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dddddd;
+  border-radius: 21px;
+  padding: 5px 5px 5px 12px;
+  /* flex안의 아이템 간격은 gap으로 설정 가능하다. */
+  gap: 12px;
+  cursor: pointer;
+}
+
+#profile-section:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
 }
