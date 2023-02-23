@@ -1,44 +1,79 @@
-/* css flex
-    자신의 컨테이너가 차지하는 공간에 맞추기 위해 크기를 키우거나 줄이는 방법을 설정하는 속성
-*/
-body {
-  color: red;
-}
-
-#flex-container {
-  /* 기본적으로 display 속성을 flex로 하게되면 좌우배치가되어 
-    세로배치되던 div가 가로로 쌓이게된다.*/
+header {
   display: flex;
-  background-color: blueviolet;
-  padding: 10px;
-  width: 300px;
-
-  /* flex-direction는 아이템이 쌓이는 방향을 지정하는 속성
-    column은 세로로 쌓이도록하는것
-    row는 가로로 쌓이도록하는것
-    reverse가 붙는것은 역순으로 배치되는 것
-  */
-  flex-direction: row-reverse;
-  /* 메인축의 정렬을 설정할 떄하는 설정이 justify-content이다 */
-  /* justify-content: ; */
-  /* 교차하는 축의 정렬을 지정할떄하는 설정이 align-items */
-  /* align-items: ; */
 }
 
-.flex-item {
-  background-color: aqua;
-  border: 1px solid black;
-  /* flex-grow display:flex인 컨테이너에 맞춰 아이템이 얼마나 늘어날지 정하는 속성;
-  flex-grow 속성을 1로 주게되면 각 아이템이 flex-grow의 숫자 비율에 맞게 영역에 맞춰서 길이를 늘린다. */
-  /* flex-grow: 1; */
-  /* flex-basis는 width랑 같이 아이템의 길이를 지정하는 속성이지만 width보다 우선순위에서 높다 */
-  flex-basis: 50px;
-  width: 250px;
-  /* 한 아이템의 크기가 container보다 큰 경우 그 크기를 축소하기 위해 사용하는 속성 */
-  /* flex-shrink: 1; */
+#logo {
+  height: 64px;
+  cursor: pointer;
 }
 
-/* :nth-child(1) <- 해당 클래스의 몇 번째 차일드에 적용할 것인지 클래스에 지정하는 것이다. */
-/* .flex-item:nth-child(1) {
-  flex-grow: 2;
+button {
+  border: none;
+  background-color: transparent;
+}
+
+#little-search {
+  display: flex;
+  align-items: center;
+  /* solid 실선 */
+  border: 1px solid #dddddd;
+  border-radius: 40px;
+  min-width: 330px;
+  justify-content: center;
+  padding: 0px 8px;
+  height: 48px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 5%);
+}
+
+.little-search-button {
+  display: block;
+  flex-shrink: 0;
+  padding: 0 16px;
+  /* 줄바꿈 안함 여부 white-space: nowrap; */
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(34, 34, 34);
+}
+
+/* nth-child는 부모의 몇번째 자식 요소인가를 포인팅 하는 것 */
+/* .little-search-button:nth-child(3) {
+  color: #ff385c;
 } */
+
+/* nth-of-type는 같은 유형의 n번째 형제인 요소  */
+.little-search-button:nth-of-type(3) {
+  color: #717171;
+}
+
+#magnifying_glass_icon {
+  width: 12px;
+}
+
+.divider {
+  /* flex-basis 플렉스 아이템의 초기 크기 */
+  flex-basis: 1px;
+  background-color: #dddddd;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+#magnifying_glass_wrapper {
+  background-color: #ff385c;
+  border-radius: 50%;
+  flex-basis: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  /* 
+  flex-shrink 속성은 플렉스박스에 "flex-wrap: wrap;" 속성을 부여한 경우 적용되지 않습니다.
+"flex-wrap" 속성을 정의하지 않거나(기본 값 "nowrap") "flex-wrap: nowrap;" 속성을 부여해야 합니다.
+
+ "flex-shrink" 속성은 기본 값이 "1"이기 때문에 속성을 정의하지 않아도 자동으로 아이템이 축소되어 적용된다는 것
+ 자동으로 아이템 너비가 축소되지 않도록 하려면 반드시 "flex-shrink: 0;"을 아이템에 선언
+  */
+  flex-shrink: 0;
+}

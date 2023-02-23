@@ -1,0 +1,44 @@
+/* css flex
+    자신의 컨테이너가 차지하는 공간에 맞추기 위해 크기를 키우거나 줄이는 방법을 설정하는 속성
+*/
+body {
+  color: red;
+}
+
+#flex-container {
+  /* 기본적으로 display 속성을 flex로 하게되면 좌우배치가되어 
+    세로배치되던 div가 가로로 쌓이게된다.*/
+  display: flex;
+  background-color: blueviolet;
+  padding: 10px;
+  width: 300px;
+
+  /* flex-direction는 아이템이 쌓이는 방향을 지정하는 속성
+    column은 세로로 쌓이도록하는것
+    row는 가로로 쌓이도록하는것
+    reverse가 붙는것은 역순으로 배치되는 것
+  */
+  flex-direction: row-reverse;
+  /* 메인축의 정렬을 설정할 떄하는 설정이 justify-content이다 */
+  /* justify-content: ; */
+  /* 교차하는 축의 정렬을 지정할떄하는 설정이 align-items */
+  /* align-items: ; */
+}
+
+.flex-item {
+  background-color: aqua;
+  border: 1px solid black;
+  /* flex-grow display:flex인 컨테이너에 맞춰 아이템이 얼마나 늘어날지 정하는 속성;
+  flex-grow 속성을 1로 주게되면 각 아이템이 flex-grow의 숫자 비율에 맞게 영역에 맞춰서 길이를 늘린다. */
+  /* flex-grow: 1; */
+  /* flex-basis는 width랑 같이 아이템의 길이를 지정하는 속성이지만 width보다 우선순위에서 높다 */
+  flex-basis: 50px;
+  width: 250px;
+  /* 한 아이템의 크기가 container보다 큰 경우 그 크기를 축소하기 위해 사용하는 속성 */
+  /* flex-shrink: 1; */
+}
+
+/* :nth-child(1) <- 해당 클래스의 몇 번째 차일드에 적용할 것인지 클래스에 지정하는 것이다. */
+/* .flex-item:nth-child(1) {
+  flex-grow: 2;
+} */

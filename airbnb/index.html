@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- link 태그로 css 파일을 불러온다. -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./index.css" />
+    <title>Clone coding</title>
   </head>
   <body>
-    <div id="flex-container">
-      <div class="flex-item">A</div>
-      <div class="flex-item">B</div>
-      <div class="flex-item">C</div>
-    </div>
+    <header>
+      <img id="logo" src="./imgs/comp_0685990 (1).png" alt="fast campus logo" />
+      <!-- 태그명#아이디 태그명.클래스명 button#main 하게되면 해당 아이디 또는 클래스를 가진 태그가나온다 -->
+      <div id="little-search">
+        <!-- 태그명*태그수를 하면 여러개의 태그를 만들 수 있다. button*3 -->
+        <button class="little-search-button">어디든지</button>
+        <span class="divider"></span>
+        <button class="little-search-button">언제든 일주일</button>
+        <span class="divider"></span>
+        <button class="little-search-button">게스트 추가</button>
+        <div id="magnifying_glass_wrapper">
+          <img
+            id="magnifying_glass_icon"
+            src="./imgs/Magnifying_glass_icon.svg"
+            alt="magnifying_glass_icon"
+          />
+        </div>
+      </div>
+    </header>
   </body>
-  <!-- javscript 코드를 script 태그에서 작성한다. -->
-  <script>
-    console.log("안녕하세요.");
-  </script>
 </html>
