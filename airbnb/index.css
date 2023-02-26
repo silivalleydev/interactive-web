@@ -330,3 +330,57 @@ button {
   grid-row-start: 1;
   grid-row-end: 3;
 }
+
+.place-img-wrapper {
+  /* 이 클래스 태그를 부모로 잡겠다는 것 */
+  position: relative;
+  width: 308px;
+  height: 293px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.place-img-wrapper img {
+  width: 500px;
+  height: 500px;
+}
+
+.place-img-wrapper .heart-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.discription-section {
+  margin-top: 13px;
+  display: flex;
+  flex-direction: column;
+  color: rgb(34, 34, 34);
+  font-size: 15px;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  padding: 24px 80px;
+}
+
+#place-items-wrapper {
+  display: grid;
+  /* 그리드 컬럼을 몇번 반복할 것인가 설정, repeat(반복할 개수, 각 그리드 크기) */
+  grid-template-columns: repeat(4, 308px);
+  justify-items: center;
+  align-items: center;
+  gap: 40px 24px;
+}
+
+.discription-section-title {
+  font-weight: 600;
+}
+
+.heart-icon:active {
+  transform: scale(0.5);
+  transition: transform 0.25s ease;
+}
