@@ -384,3 +384,30 @@ main {
   transform: scale(0.5);
   transition: transform 0.25s ease;
 }
+
+#floating-map-button {
+  position: fixed;
+  bottom: 125px;
+  /* 왼쪽으로 50%를 민다음에 
+  transform으로 translateX를 주게되면 나의 위치에서 얼마나 이동시킬지 지정할 수 있다
+  이떄 translateX를 -50%를 주게되면 중앙 정렬된다.
+   */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #222222;
+  border-radius: 24px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  padding: 14px 19px;
+  cursor: pointer;
+  gap: 8px;
+}
+
+#floating-map-button:hover {
+  box-shadow: 0 0 0 1px transparent, 0 0 0 4px transparent,
+    0 6px 16px rgba(0, 0, 0, 0.12) !important;
+  transform: translateX(-50%) scale(1.04);
+}
