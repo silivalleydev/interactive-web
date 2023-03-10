@@ -1,0 +1,167 @@
+body {
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #24145e;
+}
+
+@keyframes rotation {
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes shrinkAndGrow {
+  0% {
+    transform: scale(0);
+  }
+  25% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(0);
+  }
+  75% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes expandHorizontal {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes appearFromBottom {
+  from {
+    transform: translateY(1000px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes shakingUpAndDown {
+  from {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(5px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  75% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes soaking {
+  to {
+    transform: translateY(-250px) scale(0);
+  }
+}
+
+@keyframes shrinkHorizontal {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+#planet_2 {
+  animation-name: rotation;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#planet_1 {
+  animation-name: rotation;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#star_6 {
+  animation: shrinkAndGrow 4s infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#star_3 {
+  animation: shrinkAndGrow 2s infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#star_5 {
+  animation: shrinkAndGrow 6s infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#star_7 {
+  animation: shrinkAndGrow 9s infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#star_8 {
+  animation: shrinkAndGrow 11s infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#UFO-beam {
+  animation: expandHorizontal 3.5s;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+#UFO-beam-disappearing {
+  animation: shrinkHorizontal 2s;
+  /* 
+  content-box
+콘텐츠 상자를 참조 상자로 사용합니다. 테이블의 참조 상자는 테이블 상자가 아니라 테이블 래퍼 상자의 테두리 상자입니다.
+border-box
+테두리 상자를 참조 상자로 사용합니다. 테이블의 참조 상자는 테이블 상자가 아니라 테이블 래퍼 상자의 테두리 상자입니다.
+fill-box
+개체 경계 상자를 참조 상자로 사용합니다. 개체 경계 상자는 요소의 기하학적 모양만 포함하는 경계 상자입니다. 기본 도형의 경우 채워지는 영역입니다.
+stroke-box
+획 테두리 상자를 참조 상자로 사용합니다. 획 경계 상자는 요소의 기하학적 모양과 해당 획 모양을 포함하는 경계 상자입니다.
+view-box
+가장 가까운 SVG 뷰포트를 참조 상자로 사용합니다. */
+  transform-box: fill-box;
+  /* 
+  transform-origin(기준점 설정)
+
+앞서 학습한 내용들을 살펴보았다면 위 기능들은 해당 요소의 중심을 기점으로 동작한다는 것을 확인했을 것입니다.
+
+예를 들어 scale 이 적용된 요소는 그 중심을 기점으로 크기가 커지고 rotate 가 적용된 요소들은 요소의 중심점을 기준으로 회전을 하게 됩니다.
+
+하지만 transform-origin 속성은 전환이 발생하는 기준점을 x와 y 매개변수로 명시하여 중심이 아닌 다른 지점을 지정할 수 있는 속성입니다.
+  */
+  transform-origin: center;
+}
+
+#number-0 {
+  animation: appearFromBottom 3s;
+}
+
+#alien_hand-R,
+#alien_hand-L {
+  animation: shakingUpAndDown 1s infinite;
+}
+
+#number-0-soaking {
+  animation: soaking 2s;
+  transform-box: fill-box;
+  transform-origin: center;
+}
