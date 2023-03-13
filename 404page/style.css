@@ -164,4 +164,5 @@ view-box
   animation: soaking 2s;
   transform-box: fill-box;
   transform-origin: center;
+  animation-timing-function: cubic-bezier(0.09, 1.01, 1, -0.28);
 }
